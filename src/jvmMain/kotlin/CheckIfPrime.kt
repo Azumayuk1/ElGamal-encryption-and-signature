@@ -2,7 +2,7 @@ import java.math.BigInteger
 import java.security.SecureRandom
 
 // Проверка Миллера-Рабина
-fun isPrimeMillerRabin(n: BigInteger, k: Int = 10): Boolean {
+fun isPrimeMillerRabin(n: BigInteger, k: Int = 20): Boolean {
     if (n == BigInteger.TWO) return true
     if (n < BigInteger.TWO || n % BigInteger.TWO == BigInteger.ZERO) return false
     var (r, d) = n - BigInteger.ONE to n - BigInteger.ONE

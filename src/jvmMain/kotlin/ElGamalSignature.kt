@@ -1,7 +1,7 @@
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
-import kotlin.random.Random
+
 
 class ElGamalDigitalSignature(private val keySize: Int) {
     data class PublicKey(val p: BigInteger, val g: BigInteger, val y: BigInteger)
@@ -17,6 +17,10 @@ class ElGamalDigitalSignature(private val keySize: Int) {
         val keys = generateKeys()
         publicKey = keys.first
         privateKey = keys.second
+    }
+
+    fun accessPrivateKey(): PrivateKey {
+        return privateKey
     }
 
     fun generateKeys(): Pair<PublicKey, PrivateKey> {
@@ -58,8 +62,6 @@ class ElGamalDigitalSignature(private val keySize: Int) {
             return BigInteger(1, hashBytes)
         }
     }
-
-
 
     private fun findGenerator(p: BigInteger): BigInteger {
         var g = BigInteger("2")

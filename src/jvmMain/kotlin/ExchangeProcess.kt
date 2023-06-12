@@ -6,8 +6,7 @@ class ExchangeProcess {
     // 2
     fun checkIfNumberIsPrime(): Pair<Boolean, Boolean> {
         val p = receiver.elGamal.p
-        return Pair(isPrimeFerma(p), isPrimeMillerRabin(p, 10))
-
+        return Pair(isPrimeFerma(p), isPrimeMillerRabin(p, 20))
     }
 
     // 3
@@ -22,7 +21,7 @@ class ExchangeProcess {
 
     // 5
     fun sendSendersPublicSignatureKeyToReceiver() {
-        receiver.setSendersPublicSignatureKey(sender.getPublicSignatureKey())
+        receiver.setNewSendersPublicSignatureKey(sender.getPublicSignatureKey())
     }
 
     // 6

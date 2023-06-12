@@ -28,6 +28,13 @@ class ElGamal {
         publicKey = g.modPow(x, p)
     }
 
+    fun getPublicKeys(): Triple<BigInteger, BigInteger, BigInteger> {
+        return Triple(publicKey, p, g)
+    }
+
+    fun getPrivateKey(): BigInteger {
+        return secretKey
+    }
 
     companion object {
         // Метод для шифрования сообщения
@@ -59,7 +66,7 @@ class ElGamal {
 
 fun main() {
     // Создаем объект класса ElGamal с 128-битным ключом
-    val elGamal = ElGamal(128)
+    /*val elGamal = ElGamal(128)
     // Задаем сообщение для шифрования
     val message = encode("One")
     // Отправитель шифрует сообщение
@@ -80,26 +87,47 @@ fun main() {
     val sender = Sender()
 
     sender.setReceiversKeys(receiver.getPublicKeys())
-    println(receiver.decryptMessage(sender.encryptMessage()))
+    println(receiver.decryptMessage(sender.encryptMessage()))*/
+
     //////////
 
     // Старт программы - генерация ключей шифрования
     val process = ExchangeProcess()
+    println("Receiver's public keys: " + process.receiver.getPublicKeys())
+    println("Receiver's private key: " + process.receiver.getPrivateKey())
+    println("-----")
+
     with(process) {
+        // Проверка на простоту
+        println("Test if prime:")
+        println("Test Ferma result: " + checkIfNumberIsPrime().first)
+        println("Test Miller-Rabin result: " + checkIfNumberIsPrime().second)
+        println("-----")
+
         // Передача публичного ключа шифрования
         sendReceiversKeysToSender()
+        println("Receiver's public key sent.")
 
         // Цифровая подпись
         createSendersSignature()
+        println("Signature created.")
+
+        println("Sender's public signature key: " + sender.getPublicSignatureKey())
+        println("Sender's private signature key: " + sender.getPrivateSignatureKey())
 
         // Отправка публичного ключа ЭЦП
         sendSendersPublicSignatureKeyToReceiver()
+        println("Signature public key sent.")
 
         // Подпись и отправка сообщения
-        sendMessageToReceiver("Three")
+        sendMessageToReceiver("Moscow and Saint-Petersburg")
+        println("Message signed and sent.")
+        println("-----")
 
+        println("Message decryption:")
         println(decryptReceivedMessage())
-        println(verifySendersSignature())
+
+        println("Verified: " + verifySendersSignature())
     }
 
 }

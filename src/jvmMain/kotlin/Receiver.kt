@@ -6,14 +6,18 @@ class Receiver {
 
     lateinit var receivedMessage: Pair<BigInteger, BigInteger>
     lateinit var receivedSignature: Pair<BigInteger, BigInteger>
-    private lateinit var sendersPublicSignatureKey: ElGamalDigitalSignature.PublicKey
+    lateinit var sendersPublicSignatureKey: ElGamalDigitalSignature.PublicKey
 
-    fun setSendersPublicSignatureKey(publicKey: ElGamalDigitalSignature.PublicKey) {
+    fun setNewSendersPublicSignatureKey(publicKey: ElGamalDigitalSignature.PublicKey) {
         sendersPublicSignatureKey = publicKey
     }
 
     fun getPublicKeys(): Triple<BigInteger, BigInteger, BigInteger> {
         return Triple(elGamal.publicKey, elGamal.p, elGamal.g)
+    }
+
+    fun getPrivateKey(): BigInteger {
+        return elGamal.getPrivateKey()
     }
 
     fun decryptMessage(message: Pair<BigInteger, BigInteger>): String {

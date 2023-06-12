@@ -7,8 +7,7 @@ class Sender {
     lateinit var receiversG: BigInteger
 
     lateinit var elGamalSignature: ElGamalDigitalSignature
-    //private lateinit var message: String
-    var message: String = "Three"
+    private lateinit var message: String
 
     fun generateElGamalSignature() {
         elGamalSignature = ElGamalDigitalSignature(128)
@@ -40,5 +39,9 @@ class Sender {
 
     fun getPublicSignatureKey(): ElGamalDigitalSignature.PublicKey {
         return elGamalSignature.publicKey
+    }
+
+    fun getPrivateSignatureKey(): ElGamalDigitalSignature.PrivateKey {
+        return elGamalSignature.accessPrivateKey()
     }
 }
