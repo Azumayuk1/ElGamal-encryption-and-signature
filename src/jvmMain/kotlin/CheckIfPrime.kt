@@ -28,11 +28,11 @@ fun isPrimeMillerRabin(n: BigInteger, k: Int = 20): Boolean {
 }
 
 // Проверка Ферма
-fun isPrimeFerma(n: BigInteger): Boolean {
+fun isPrimeFermat(n: BigInteger): Boolean {
     if (n == BigInteger.TWO) return true
     if (n < BigInteger.TWO || n % BigInteger.TWO == BigInteger.ZERO) return false
     val random = SecureRandom()
-    repeat(20) { // Количество проверок
+    repeat(35) { // Количество проверок
         var a = BigInteger(n.bitLength(), random)
         while (a >= n) {
             a = BigInteger(n.bitLength(), random)

@@ -65,32 +65,6 @@ class ElGamal {
 }
 
 fun main() {
-    // Создаем объект класса ElGamal с 128-битным ключом
-    /*val elGamal = ElGamal(128)
-    // Задаем сообщение для шифрования
-    val message = encode("One")
-    // Отправитель шифрует сообщение
-    val ciphertext = ElGamal.encrypt(message, elGamal.publicKey, elGamal.p, elGamal.g)
-    // Расшифровываем сообщение
-    val decryptedMessage = elGamal.decrypt(ciphertext)
-    // Выводим результаты в консоль
-    println("Original message: $message")
-    println("Encrypted message: $ciphertext")
-    println("Decrypted message: $decryptedMessage")
-
-    println(decode(message))
-    println(decode(decryptedMessage))
-
-    ////////////
-
-    val receiver = Receiver()
-    val sender = Sender()
-
-    sender.setReceiversKeys(receiver.getPublicKeys())
-    println(receiver.decryptMessage(sender.encryptMessage()))*/
-
-    //////////
-
     // Старт программы - генерация ключей шифрования
     val process = ExchangeProcess()
     println("Receiver's public keys: " + process.receiver.getPublicKeys())

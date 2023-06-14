@@ -53,24 +53,24 @@ fun App() {
 
         Row(modifier = Modifier.padding(8.dp)) {
             Column(modifier = Modifier.padding(8.dp).fillMaxWidth(0.5f)) {
-                Text("Получатель", fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
+                Text("Receiver", fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
                 Button(onClick = {
                     exchangeProcess = ExchangeProcess()
                     receiverPublicKey = exchangeProcess.receiver.getPublicKeys().toString()
                     receiverPrivateKey = exchangeProcess.receiver.getPrivateKey().toString()
                     receiverPrimeNumber = exchangeProcess.receiver.elGamal.p.toString()
                 }) {
-                    Text("1: Сгенерировать ключи")
+                    Text("1: Generate keys")
                 }
 
-                Text("Приватный ключ:", fontWeight = FontWeight.Bold)
+                Text("Private key:", fontWeight = FontWeight.Bold)
                 Text(receiverPrivateKey)
 
 
-                Text("Публичный ключ:", fontWeight = FontWeight.Bold)
+                Text("Public key:", fontWeight = FontWeight.Bold)
                 Text(receiverPublicKey)
 
-                Text("Простое число:", fontWeight = FontWeight.Bold)
+                Text("Used prime number:", fontWeight = FontWeight.Bold)
                 Text(receiverPrimeNumber)
 
                 Button(onClick = {
@@ -78,69 +78,81 @@ fun App() {
                     primeTestFermaResult = results.first
                     primeTestMillerRabinResult = results.second
                 }) {
-                    Text("2: Проверить простоту")
+                    Text("2: Check primality")
                 }
 
-                Text("Результат проверки Ферма:", fontWeight = FontWeight.Bold)
-                Text(primeTestFermaResult.toString())
+                Text("Fermat primality test result:", fontWeight = FontWeight.Bold)
+                Text(
+                    when(primeTestFermaResult) {
+                    true -> "OK: Number is prime"
+                    false -> "Error: Number is NOT prime"
+                })
 
-                Text("Результат проверки Миллера-Рабина:", fontWeight = FontWeight.Bold)
-                Text(primeTestMillerRabinResult.toString())
+                Text("Miller-Rabin primality test result:", fontWeight = FontWeight.Bold)
+                Text(
+                    when(primeTestMillerRabinResult) {
+                    true -> "OK: Number is prime"
+                    false -> "Error: Number is NOT prime"
+                })
 
                 Button(onClick = {
                     exchangeProcess.sendReceiversKeysToSender()
                     senderReceivedPublicKey = exchangeProcess.sender.receiversPublicKey.toString()
                 }) {
-                    Text("3: Отправить публичный ключ")
+                    Text("3: Send public key")
                 }
 
                 Button(onClick = {
                     receiverDecryptedMessage = exchangeProcess.decryptReceivedMessage()
                 }) {
-                    Text("7: Расшифровать сообщение")
+                    Text("7: Decrypt the message")
                 }
 
-                Text("Расшифрованное сообщение:", fontWeight = FontWeight.Bold)
+                Text("Decrypted message:", fontWeight = FontWeight.Bold)
                 Text(receiverDecryptedMessage)
 
-                Text("Публичный ключ подписи отправителя:", fontWeight = FontWeight.Bold)
+                Text("Public signature key:", fontWeight = FontWeight.Bold)
                 Text(receiverSendersSignaturePublicKey)
 
                 Button(onClick = {
                     receiverIsMessageVerified = exchangeProcess.verifySendersSignature()
                 }) {
-                    Text("8: Проверить подпись")
+                    Text("8: Verify signature")
                 }
 
-                Text("Результат проверки подписи:", fontWeight = FontWeight.Bold)
-                Text(receiverIsMessageVerified.toString())
+                Text("Verifying signature result:", fontWeight = FontWeight.Bold)
+                Text(
+                    when(receiverIsMessageVerified) {
+                        true -> "Signature verified"
+                        false -> "Error: signature not verified"
+                    })
             }
 
             Column(modifier = Modifier.padding(8.dp).fillMaxWidth(0.5f)) {
-                Text("Отправитель", fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
+                Text("Sender", fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
 
                 Button(onClick = {
                     exchangeProcess.createSendersSignature()
                     senderSignaturePrivateKey = exchangeProcess.sender.getPrivateSignatureKey().toString()
                     senderSignaturePublicKey = exchangeProcess.sender.getPublicSignatureKey().toString()
                 }) {
-                    Text("4: Сгенерировать ключи подписи")
+                    Text("4: Generate signature keys")
                 }
 
-                Text("Приватный ключ подписи:", fontWeight = FontWeight.Bold)
+                Text("Private signature key:", fontWeight = FontWeight.Bold)
                 Text(senderSignaturePrivateKey)
 
-                Text("Публичный ключ подписи:", fontWeight = FontWeight.Bold)
+                Text("Public signature key:", fontWeight = FontWeight.Bold)
                 Text(senderSignaturePublicKey)
 
                 Button(onClick = {
                     exchangeProcess.sendSendersPublicSignatureKeyToReceiver()
                     receiverSendersSignaturePublicKey = exchangeProcess.receiver.sendersPublicSignatureKey.toString()
                 }) {
-                    Text("5: Отправить публичный ключ")
+                    Text("5: Send public key")
                 }
 
-                Text("Полученный публичный ключ шифрования:", fontWeight = FontWeight.Bold)
+                Text("Received public key:", fontWeight = FontWeight.Bold)
                 Text(senderReceivedPublicKey)
 
                 Button(onClick = {
@@ -150,21 +162,34 @@ fun App() {
                     encryptedMessage = exchangeProcess.receiver.receivedMessage.toString()
                     encryptedMessageSignature = exchangeProcess.receiver.receivedSignature.toString()
                 }) {
-                    Text("6: Подписать и отправить сообщение")
+                    Text("6: Sign and send the message")
                 }
 
                 TextField(
                     value = messageText,
                     onValueChange = { messageText = it },
-                    label = { Text("Введите сообщение") }
+                    label = { Text("Message input") }
                 )
 
-                Text("Зашифрованный текст:", fontWeight = FontWeight.Bold)
+                Text("Encrypted text:", fontWeight = FontWeight.Bold)
                 Text(encryptedMessage)
 
 
-                Text("Подпись:", fontWeight = FontWeight.Bold)
+                Text("Signature:", fontWeight = FontWeight.Bold)
                 Text(encryptedMessageSignature)
+
+                Text("Intruder's possibilities:", fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
+                Button(onClick = {
+                    exchangeProcess.fakeMessage()
+                }) {
+                    Text("Fake message")
+                }
+
+                Button(onClick = {
+                    exchangeProcess.fakeSignature()
+                }) {
+                    Text("Fake signature")
+                }
 
             }
 
@@ -174,7 +199,7 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication, title = "Криптографический алгоритм") {
+    Window(onCloseRequest = ::exitApplication, title = "ElGamal encryption") {
         App()
     }
 }

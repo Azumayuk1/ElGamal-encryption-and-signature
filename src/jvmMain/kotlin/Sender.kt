@@ -7,7 +7,7 @@ class Sender {
     lateinit var receiversG: BigInteger
 
     lateinit var elGamalSignature: ElGamalDigitalSignature
-    private lateinit var message: String
+    lateinit var message: String
 
     fun generateElGamalSignature() {
         elGamalSignature = ElGamalDigitalSignature(128)
